@@ -1,0 +1,21 @@
+@import "./variables";
+
+@mixin flexStyle($direction) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: space-between;
+}
+
+.wrapper {
+  @include flexStyle(row);
+  button {
+    min-height: 4em;
+    min-width: 4em;
+    border-radius: 50%;
+    background-color: lighten($primary-color, 60%);
+    border: none;
+    background-image: url("../../public/arrow.svg");
+    background-position: center;
+    background-size: cover;
+  }
+}

@@ -1,0 +1,53 @@
+@import "variables";
+@import "./resets.module.scss";
+
+.main {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  min-width: 100vw;
+
+  .container {
+    max-width: 40vw;
+    padding: 1rem;
+    margin: 0 auto;
+    margin-top: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    .search {
+      position: relative;
+      input {
+        width: 100%;
+        height: 3em;
+        border-radius: 0.8em;
+        border: none;
+        background-color: lighten($grey-color, 25%);
+        outline: none;
+      }
+      button{
+        position: absolute;
+        right:2%;
+        top: 15%;
+        height:2em;
+        width: 2em;
+        border: none;
+        background-color: transparent;
+        background-image: url("../../public/icons8-search.svg") ;
+        background-position: top left;
+        background-size: cover;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+/*
+name scss file as _variable.scss
+import it like @import "./variable"
+& means parent
+_variable.scss means it wont be compiled 
+functions and mixins what both  do?
+
+*/
