@@ -3,20 +3,69 @@ import style from "@/styles/index.module.scss";
 import Navbar from "@/components/Navbar";
 import Pronounciation from "@/components/Pronounciation";
 import Verb from "@/components/Verb";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
+import dicCtx, { DicCtxType } from "@/context/dictionaryCtx";
 
+// type responseType = {
+//   phonetic: string;
+//   audio: string;
+//   meanings: {
+//     definitions: {
+//       definition: string;
+//       synonyms: string[];
+//       antonyms: string[];
+//     }[];
+//     partOfSpeech: string;
+//     synonyms: string[];
+//   }[];
+// };
 
-export default function Home(props: { man: string; woman: string }) {
-  let inputRef=useRef<HTMLInputElement>(null)
-  const [inputWord,setInputWord] = useState<string|undefined>(" ")
-  const data =[
-    "(etc) a set of keys used to operate",
-    "a component of many instruments including the piano",
-    "a device with keys of a musical keyboard"
-  ]
-  // const inputHandler=(e:)=>{
-  //   setInputWord(inputRef.current?.value)
-  // }
+export default function Home() {
+  let inputRef = useRef<HTMLInputElement>(null);
+  const [inputWord, setInputWord] = useState<string | undefined>(" ");
+  const [meanings, setMeanings] = useState<
+    | {
+        definitions: {
+          definition: string;
+          synonyms: string[];
+          antonyms: string[];
+        }[];
+        partOfSpeech: string;
+        synonyms: string[];
+      }[]
+    | null
+  >();
+  const [phonetic, setPhonetic] = useState<string | null>(null);
+  const [audio, setAudio] = useState<string | null>(null);
+  let { theme } = useContext(dicCtx) as DicCtxType;
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      let url = `https://api.dictionaryapi.dev/api/v2/entries/en/${inputWord}`;
+      let rawResponse = await fetch(url);
+      let response = await rawResponse.json();
+      let { meanings, phonetic, phonetics } = response[0];
+      // let audio = phonetics[2]["audio"];
+      console.log(phonetics);
+      console.log(response[0]);
+      meanings = meanings.map((obj: any) => {
+        return {
+          synonyms: obj.synonyms,
+          partOfSpeech: obj.partOfSpeech,
+          definitions: obj.definitions,
+        };
+      });
+      if (!ignore) {
+        setPhonetic(phonetic);
+        setMeanings(meanings);
+        setAudio(audio);
+      }
+    }
+    fetchData();
+    return () => {
+      ignore = true;
+    };
+  }, [inputWord]);
   return (
     <>
       <Head>
@@ -25,92 +74,48 @@ export default function Home(props: { man: string; woman: string }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${style.main}  ${style.light}`}>
+      <main className={`${style.main}  ${theme ? style.light : style.dark}`}>
         <div className={style.container}>
           <Navbar />
           <div className={style.search}>
-            <input type="search" ref={inputRef}/>
-            <button onClick={(e)=>{setInputWord(inputRef.current?.value);console.log(e)}}></button>
+            <input type="search" ref={inputRef} />
+            <button
+              onClick={(e) => {
+                setInputWord(inputRef.current?.value);
+                console.log(e);
+              }}
+            ></button>
           </div>
-          <Pronounciation input={inputWord}/>
-          <Verb type={"verb"} meanings={data} synonym={"Piano keyboard"} />
+          <Pronounciation input={inputWord} />
+          <Verb meanings={meanings} />
         </div>
       </main>
     </>
   );
 }
 
-// export async function getStaticProps(){
+export async function getStaticProps() {
+  const word = "love";
+  let url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
 
-//   const app_id = "13d104e6";
-//   const app_key = "7d6501aac00aec8253fded44494717b4";
-//   const wordId = "ace";
-//   const fields = "pronunciations";
-//   const strictMatch = "false";
-//   const options = {
-//     host: "od-api.oxforddictionaries.com",
-//     port: "443",
-//     path:
-//       "/api/v2/entries/en-gb/" +
-//       wordId +
-//       "?fields=" +
-//       fields +
-//       "&strictMatch=" +
-//       strictMatch,
-//     method: "GET",
-//     headers: {
-//       app_id: app_id,
-//       app_key: app_key,
-//     },
-//   };
-//   let res = await https.get(options, (resp:Http2ServerResponse) => {
-//     let body = "";
-//     resp.on("data", (d) => {
-//       body += d;
-//     });
-//     resp.on("end", () => {
-//       let parsed = JSON.stringify(body);
-//       return parsed
-//     });
-//   });
-//   console.log(res)
-//   return {
-//     props:{
-//       res:"kill"
-//     }
-//   }
+  let rawData = await fetch(url);
+  let res = await rawData.json();
 
-// }
+  let { meanings, phonetic, phonetics } = res[0];
 
-// const https = require("https");
-// const app_id = "<my app_id>";
-// const app_key = "<my app_key>";
-// const wordId = "ace";
-// const fields = "pronunciations";
-// const strictMatch = "false";
-// const options = {
-//   host: "od-api.oxforddictionaries.com",
-//   port: "443",
-//   path:
-//     "/api/v2/entries/en-gb/" +
-//     wordId +
-//     "?fields=" +
-//     fields +
-//     "&strictMatch=" +
-//     strictMatch,
-//   method: "GET",
-//   headers: {
-//     app_id: app_id,
-//     app_key: app_key,
-//   },
-// };
-// https.get(options, (resp) => {
-//   let body = "";
-//   resp.on("data", (d) => {
-//     body += d;
-//   });
-//   resp.on("end", () => {
-//     let parsed = JSON.stringify(body);
-//     console.log(parsed);
-//   });
-// });
+  return {
+    props: {
+      res: {
+        phonetic,
+        audio: phonetics[2]["audio"],
+        meanings: meanings.map((obj: any) => {
+          return {
+            synonyms: obj.synonyms,
+            partOfSpeech: obj.partOfSpeech,
+            definitions: obj.definitions,
+          };
+        }),
+      },
+    },
+  };
+}

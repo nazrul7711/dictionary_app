@@ -1,36 +1,55 @@
-.switch {
-  display: inline-block;
-  height: 30px;
-  width: 60px;
-  position: relative;
-  input[type="checkbox"] {
-    opacity: 0;
-    width: 0;
-    height: 0;
+@mixin flexStyle($space) {
+  display: flex;
+  justify-content: $space;
+  align-items: center;
+}
+.wrapper {
+  @include flexStyle(space-between);
+  .theme {
+    min-width: 50%;
+    @include flexStyle((space-around));
+    select {
+      border: none;
+      outline: none;
+      &option {
+        font-size: 100px;
+      }
+    }
   }
-  span {
-    position: absolute;
-    inset: 0;
-    background-color: #e57b7b;
-    cursor: pointer;
-    transition: .4s;
-    border-radius: 18px;
-  }
-  span:before {
-    position: absolute;
-    content: "";
-    height: 28px;
-    width: 28px;
-    left: 1%;
-    bottom: 3%;
-    background-color: white;
-    border-radius: 50%;
-    transition: 0.4s;
-  }
-  input:checked + span:before {
-    transform: translateX(100%);
-  }
-  input:checked + span {
-    background-color: grey;
+  .switch {
+    display: inline-block;
+    height: 30px;
+    width: 60px;
+    position: relative;
+    input[type="checkbox"] {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    span {
+      position: absolute;
+      inset: 0;
+      background-color: #e57b7b;
+      cursor: pointer;
+      transition: 0.4s;
+      border-radius: 18px;
+    }
+    span:before {
+      position: absolute;
+      content: "";
+      height: 28px;
+      width: 28px;
+      left: 1%;
+      bottom: 3%;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+    input:checked + span:before {
+      transform: translateX(100%);
+    }
+    input:checked + span {
+      background-color: grey;
+    }
   }
 }
