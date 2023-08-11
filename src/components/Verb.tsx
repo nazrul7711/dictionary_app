@@ -22,13 +22,13 @@ type propType =
 
 const Verb = ({ meanings }: { meanings: propType }) => {
   if(meanings?.length===0){
-    return "No meaning found"
+    return <h1>No meaning found</h1>;
   }
   return (
     <div className={style.wrapper}>
       <ul className={style.parentUl}>
-        {meanings?.map((item) => (
-          <li>
+        {meanings?.map((item,index) => (
+          <li key={index}>
             <p className={`${cookie.className} ${style.type}`}>
               {item.partOfSpeech} <span className={style.line}></span>
             </p>

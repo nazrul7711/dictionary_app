@@ -3,13 +3,10 @@ import style from "@/styles/index.module.scss";
 import Navbar from "@/components/Navbar";
 import Pronounciation from "@/components/Pronounciation";
 import Verb from "@/components/Verb";
-import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
+import {  useContext, useEffect, useRef, useState } from "react";
 import dicCtx, { DicCtxType } from "@/context/dictionaryCtx";
 
-type User={
-  name:string;
-  surname:string
-}
+
 
 export default function Home() {
   let inputRef = useRef<HTMLInputElement>(null);
@@ -27,7 +24,7 @@ export default function Home() {
     | null
   >();
   const [phonetic, setPhonetic] = useState<string | null>(null);
-  const [audio, setAudio] = useState<string | null>(null);
+  const [audio, setAudio] = useState<string | undefined>();
   let { theme } = useContext(dicCtx) as DicCtxType;
 
 
@@ -40,8 +37,7 @@ export default function Home() {
       console.log(response)
       let { meanings=[], phonetic="", phonetics=[] } = response[0] || {};
       let audio = phonetics.length > 2 && phonetics[2]["audio"] ;
-      // console.log(phonetics);
-      // console.log(response[0]);
+
       meanings = meanings ? meanings.map((obj: any) => {
         return {
           synonyms: obj.synonyms,
@@ -87,28 +83,3 @@ export default function Home() {
   );
 }
 
-// export async function getStaticProps() {
-//   const word = "love";
-//   let url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
-
-//   let rawData = await fetch(url);
-//   let res = await rawData.json();
-
-//   let { meanings, phonetic, phonetics } = res[0];
-
-//   return {
-//     props: {
-//       res: {
-//         phonetic,
-//         audio: phonetics[2]["audio"],
-//         meanings: meanings.map((obj: any) => {
-//           return {
-//             synonyms: obj.synonyms,
-//             partOfSpeech: obj.partOfSpeech,
-//             definitions: obj.definitions,
-//           };
-//         }),
-//       },
-//     },
-//   };
-// }
