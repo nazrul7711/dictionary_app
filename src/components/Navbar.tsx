@@ -69,11 +69,17 @@ const Navbar = () => {
         </label>
         <div>
           {theme ? (
-            <Image src={"/moon.svg"} alt="moon" height={50} width={50} />
-          ) : (
             <Image
               src={"/sun-svgrepo-com.svg"}
               alt="sun"
+              height={50}
+              width={50}
+            />
+          ) : (
+            <Image
+              className={style.moon}
+              src={"/half_moon.svg"}
+              alt="moon"
               height={50}
               width={50}
             />

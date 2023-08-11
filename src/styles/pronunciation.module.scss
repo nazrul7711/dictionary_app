@@ -8,6 +8,13 @@
 
 .wrapper {
   @include flexStyle(row);
+  h3{
+    color:mix(white,$primary-color,55%);
+    margin-top: .5rem;
+  }
+  .audio{
+    cursor: pointer;
+  }
   button {
     min-height: 4em;
     min-width: 4em;

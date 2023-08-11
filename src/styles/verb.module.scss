@@ -8,6 +8,9 @@
 .wrapper {
   @include flexStyle(column);
   min-height: 40vh;
+  .parentUl{
+    list-style: none;
+  }
   .type {
     font-size: 1.8em;
     .line {

@@ -21,9 +21,12 @@ type propType =
   | null;
 
 const Verb = ({ meanings }: { meanings: propType }) => {
+  if(meanings?.length===0){
+    return "No meaning found"
+  }
   return (
     <div className={style.wrapper}>
-      <ul>
+      <ul className={style.parentUl}>
         {meanings?.map((item) => (
           <li>
             <p className={`${cookie.className} ${style.type}`}>

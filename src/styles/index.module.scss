@@ -1,17 +1,28 @@
 @import "variables";
 @import "./resets.module.scss";
 
-.dark{
+.dark {
   min-height: 100vh;
   max-width: 100vw;
   background-color: $dark-color;
-  color:$light-color;
+  color: $light-color;
 }
-.light{
+.light {
   min-height: 100vh;
   max-width: 100vw;
   background-color: $light-color;
-  color:$dark-color;
+  color: $dark-color;
+}
+@mixin respondTo($size) {
+  @if($size==tablet) {
+    @media(max-width:600px) {
+      @content;
+    }
+  }@else if($size==mobile){
+    @media(max-width:365px){
+      @content;
+    }
+  }
 }
 
 .main {
@@ -25,10 +36,16 @@
     max-width: 40vw;
     padding: 1rem;
     margin: 0 auto;
-    margin-top: 2em;
+    padding-top: 2em;
     display: flex;
     flex-direction: column;
     gap: 2em;
+    @include respondTo(mobile){
+      max-width: 100%;
+    }
+    @include respondTo(tablet){
+      max-width: 100%;
+    }
     .search {
       position: relative;
       input {
@@ -37,12 +54,14 @@
         border-radius: 0.8em;
         border: none;
         background-color: lighten($grey-color, 25%);
+        padding: 1rem;
+        font-size: 1.2rem;
         outline: none;
       }
       button {
         position: absolute;
         right: 2%;
-        top: 15%;
+        top: 25%;
         height: 2em;
         width: 2em;
         border: none;
@@ -51,8 +70,8 @@
         background-position: top left;
         background-size: cover;
         cursor: pointer;
+        outline: none;
       }
     }
   }
 }
-

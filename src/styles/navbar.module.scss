@@ -1,3 +1,4 @@
+@import "variables";
 @mixin flexStyle($space) {
   display: flex;
   justify-content: $space;
@@ -11,8 +12,9 @@
     select {
       border: none;
       outline: none;
+      padding:.5em .8em;
+      border-radius: .5em;
       &option {
-        font-size: 100px;
       }
     }
   }
@@ -29,7 +31,7 @@
     span {
       position: absolute;
       inset: 0;
-      background-color: #e57b7b;
+      background-color:$grey-color;
       cursor: pointer;
       transition: 0.4s;
       border-radius: 18px;
